@@ -9,18 +9,18 @@ description = "Pipeline reproducible de calidad y versionado para datasets COCO"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
-  "fastapi>=0.116,<1",
-  "minio>=7.2,<8",
-  "pydantic-settings>=2.10,<3",
-  "pymysql>=1.1,<2",
-  "uvicorn[standard]>=0.35,<1",
+  "fastapi>=0.116",
+  "minio>=7.2",
+  "pydantic-settings>=2.10",
+  "pymysql>=1.1",
+  "uvicorn[standard]>=0.35",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "dvc[s3]>=3.63,<4",
-  "pytest>=8.4,<9",
-  "ruff>=0.12,<1",
+  "dvc[s3]>=3.63",
+  "pytest>=8.4",
+  "ruff>=0.12",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -42,4 +42,3 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 [tool.ruff.format]
 quote-style = "double"
 line-ending = "lf"
-
