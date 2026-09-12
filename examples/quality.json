@@ -1,0 +1,8 @@
+{
+  "min_images_per_class": {
+    "status": "pass",
+    "observed": 305,
+    "threshold": 300,
+    "offending_samples": []
+  }
+}
