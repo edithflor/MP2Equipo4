@@ -110,3 +110,14 @@ ORDER BY annotated_images DESC;
 
 Metas del plan: 150 imágenes distintas por clase el 11 de septiembre y 300 por clase antes del
 release, en al menos dos clases. El conteo definitivo se recalcula después de colapsar duplicados.
+
+
+## Desarrollo local
+
+El proyecto exige Python 3.12. La `.venv` nunca se versiona.
+
+### 1. Crear y activar el entorno virtual
+En Linux / macOS:
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
