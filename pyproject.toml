@@ -21,6 +21,7 @@ dependencies = [
 dev = [
   "dvc[s3]>=3.63",
   "pytest>=8.4",
+  "pytest-bdd>=8,<9",
   "ruff>=0.12",
 ]
 

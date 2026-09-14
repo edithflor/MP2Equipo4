@@ -49,3 +49,24 @@ serialización, errores estructurales y de referencias, IDs repetidos y conserva
 de defectos para análisis. La muestra es sintética; no es evidencia de anotación humana.
 
 Referencia: https://docs.pydantic.dev/latest/concepts/validators/
+
+## SPEC-F2-01: escenarios ejecutables y evidencia
+
+`features/f2-01-pydantic-coco.feature` contiene los cinco escenarios del ticket.
+`tests/test_coco_feature.py` los ejecuta con pytest-bdd dentro de la suite normal y
+de CI. Usa `tests/fixtures/mp1-coco.json`, extraído de la base local antigua del MP1;
+su procedencia y limitaciones están en `tests/fixtures/README.md`.
+
+```sh
+python -m pip install -e ".[dev]"
+python -m pytest tests/test_coco_feature.py -v
+```
+
+Se comprueban modelos anidados tipados, las tres inyecciones con ubicación del campo
+y ValidationError en vez de KeyError, y ausencia de las APIs v1 en el módulo COCO.
+El JSON real del endpoint actual aún deberá contrastarse durante la integración F2-02.
+
+Limitación de aceptación: la implementación inicial no tiene tres commits
+red/green/refactor para un escenario. Agregar estos escenarios posteriormente no
+acredita ese requisito histórico; debe declararse al revisar el ticket. No se ha
+reescrito el historial ni creado un fallo artificial para simular TDD.
