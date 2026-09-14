@@ -121,3 +121,9 @@ En Linux / macOS:
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
+```
+
+## TF-01 — Terraform por capas
+
+Ver [módulos, entornos dev/prod y comandos](terraform/README.md) y
+[evidencia de validación](docs/tf-01-validation.md).
