@@ -21,6 +21,16 @@ terraform validate
 necesita credenciales. Versionar `.terraform.lock.hcl` para reproducir el provider.
 La CI ejecuta estos controles sin claves AWS.
 
+Al actualizar el provider, registrar los checksums de las dos plataformas antes
+de subir el lockfile (desarrollo en Windows y CI en Linux):
+
+```sh
+terraform providers lock -platform=windows_amd64 -platform=linux_amd64
+```
+
+Esto permite conservar `-lockfile=readonly` en CI y verificar también el paquete
+Linux instalado, sin desactivar la comprobación de integridad.
+
 ## Configuración para un despliegue posterior
 
 Copiar `terraform.tfvars.example` a `terraform.tfvars` y elegir un nombre de bucket
