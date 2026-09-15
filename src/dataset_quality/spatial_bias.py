@@ -2,10 +2,16 @@ import statistics
 from typing import Any
 
 
+def _get_quadrant(cx: float, cy: float, mid_w: float, mid_h: float) -> str:
+    """Determina el cuadrante espacial dado un centroide y los puntos medios."""
+    if cy < mid_h:
+        return "TL" if cx < mid_w else "TR"
+    return "BL" if cx < mid_w else "BR"
+
+
 def analyze_spatial_bias(coco_data: dict[str, Any]) -> dict[str, Any]:
     """
-    Calcula estadísticas descriptivas (media, mediana, percentiles)
-    y detecta sesgos espaciales dividiendo la imagen en cuadrantes.
+    Calcula estadísticas descriptivas y detecta sesgos espaciales.
     Cumple con SPEC-F3-05.
     """
     annotations = coco_data.get("annotations", [])
@@ -25,26 +31,14 @@ def analyze_spatial_bias(coco_data: dict[str, Any]) -> dict[str, Any]:
         if bbox and len(bbox) >= 4 and img_id in images:
             x, y, w, h = bbox[0], bbox[1], bbox[2], bbox[3]
 
-            cx = x + (w / 2.0)
-            cy = y + (h / 2.0)
-
             img_w = images[img_id].get("width", 0)
             img_h = images[img_id].get("height", 0)
 
             if img_w > 0 and img_h > 0:
-                mid_w = img_w / 2.0
-                mid_h = img_h / 2.0
-
-                if cy < mid_h:
-                    if cx < mid_w:
-                        quadrant_counts["TL"] += 1
-                    else:
-                        quadrant_counts["TR"] += 1
-                else:
-                    if cx < mid_w:
-                        quadrant_counts["BL"] += 1
-                    else:
-                        quadrant_counts["BR"] += 1
+                cx = x + (w / 2.0)
+                cy = y + (h / 2.0)
+                quadrant = _get_quadrant(cx, cy, img_w / 2.0, img_h / 2.0)
+                quadrant_counts[quadrant] += 1
 
     result = {
         "mean_area": 0.0,
