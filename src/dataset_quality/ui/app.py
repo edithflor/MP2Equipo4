@@ -1,6 +1,6 @@
 import streamlit as st
-from dataset_quality.ui.overview import get_overview_metrics
 
+from dataset_quality.ui.overview import get_overview_metrics
 
 st.set_page_config(page_title="Dataset Quality", layout="wide")
 
