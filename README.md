@@ -64,6 +64,9 @@ ruff check .
 ruff format --check .
 pytest
 python scripts/check_repo_hygiene.py
+
+# Para levantar la interfaz web:
+streamlit run src/dataset_quality/ui/app.py
 ```
 
 La CI ejecuta esos tres controles con Python 3.12 en cada push a `main` y en cada pull request.
@@ -112,23 +115,38 @@ Metas del plan: 150 imágenes distintas por clase el 11 de septiembre y 300 por 
 release, en al menos dos clases. El conteo definitivo se recalcula después de colapsar duplicados.
 
 
-## Desarrollo local
-
-El proyecto exige Python 3.12. La `.venv` nunca se versiona.
-
-### 1. Crear y activar el entorno virtual
-En Linux / macOS:
-```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
-```
-
 ## TF-01 — Terraform por capas
 
 Ver [módulos, entornos dev/prod y comandos](terraform/README.md) y
 [evidencia de validación](docs/tf-01-validation.md).
 
-## F2-01 ? Modelos COCO
+## F2-01 — Modelos COCO
 
-Ver el [contrato COCO, escenarios y l?mites](docs/f2-01-coco-models.md).
-F2-01 y TF-01 no acreditan A-01 ni implementan la ingesta F2-02 o el conteo F2-04.
+Ver el [contrato COCO, escenarios y límites](docs/f2-01-coco-models.md).
+F2-01 y TF-01 no acreditan el volumen de anotación A-01.
+
+## F2-02 — Ingesta del COCO validado
+
+La ingesta recibe el JSON COCO exportado desde el Proyecto 1, lo valida usando
+`dataset_quality.coco.CocoDataset` y genera un artefacto validado para las
+siguientes etapas del pipeline.
+
+El dataset real y las imágenes deben permanecer fuera de Git. El directorio
+`data/` está ignorado por `.gitignore`.
+
+Configura las rutas en `.env`:
+
+```env
+COCO_INPUT_PATH=data/raw/annotations_coco.json
+COCO_VALIDATED_PATH=data/validated/coco.json
+```
+
+Ejecuta la ingesta con:
+
+```bash
+python -m dataset_quality.ingest
+```
+
+Si el coco es válido, el comando termina con código 0 y genera el artefacto
+validado, si el coco es inválido termina con código distinto de 0 y muestra
+el campo que falló
