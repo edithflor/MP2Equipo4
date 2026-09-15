@@ -147,3 +147,14 @@ Configura las rutas en `.env`:
 ```env
 COCO_INPUT_PATH=data/raw/annotations_coco.json
 COCO_VALIDATED_PATH=data/validated/coco.json
+```
+
+Ejecuta la ingesta con:
+
+```bash
+python -m dataset_quality.ingest
+```
+
+Si el coco es válido, el comando termina con código 0 y genera el artefacto
+validado, si el coco es inválido termina con código distinto de 0 y muestra
+el campo que falló
