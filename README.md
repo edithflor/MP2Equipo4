@@ -132,3 +132,19 @@ source .venv/bin/activate
 
 Estas tareas no acreditan el volumen de anotación A-01 ni implementan la ingesta
 F2-02 o el conteo F2-04.
+
+
+## F2-02 — Ingesta del COCO validado
+
+La ingesta recibe el JSON COCO exportado desde el Proyecto 1, lo valida usando
+`dataset_quality.coco.CocoDataset` y genera un artefacto validado para las
+siguientes etapas del pipeline.
+
+El dataset real y las imágenes deben permanecer fuera de Git. El directorio
+`data/` está ignorado por `.gitignore`.
+
+Configura las rutas en `.env`:
+
+```env
+COCO_INPUT_PATH=data/raw/annotations_coco.json
+COCO_VALIDATED_PATH=data/validated/coco.json
