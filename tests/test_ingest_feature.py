@@ -30,6 +30,7 @@ def invalid_coco(context):
     fixture = Path(__file__).parent / "fixtures" / "mp1-coco.json"
     payload = json.loads(fixture.read_text(encoding="utf-8"))
     payload["annotations"][0]["bbox"] = [10, 20, 30]
+
     context["input_path"].write_text(
         json.dumps(payload),
         encoding="utf-8",
@@ -43,13 +44,17 @@ def configure_env(context, monkeypatch):
 
 
 @when("corro la ingesta")
-def run_ingest(context, monkeypatch):
+def run_ingest(context, monkeypatch, capsys):
     monkeypatch.setenv("COCO_INPUT_PATH", str(context["input_path"]))
     monkeypatch.setenv("COCO_VALIDATED_PATH", str(context["output_path"]))
 
     from dataset_quality.ingest import main
 
     context["exit_code"] = main()
+
+    captured = capsys.readouterr()
+    context["stdout"] = captured.out
+    context["stderr"] = captured.err
 
 
 @then("termina 0")
@@ -74,9 +79,11 @@ def exits_nonzero(context):
 
 
 @then("el error nombra el campo")
-def error_names_field(context, capsys):
-    captured = capsys.readouterr()
-    assert "bbox" in captured.err.lower() or "bbox" in captured.out.lower()
+def error_names_field(context):
+    assert (
+        "bbox" in context["stderr"].lower()
+        or "bbox" in context["stdout"].lower()
+    )
 
 
 @then("no queda artefacto válido a medias")
