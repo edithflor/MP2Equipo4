@@ -1,54 +1,69 @@
-# TF-01 — Módulos y validación
+# TF-01 — Terraform por capas
 
-Requiere Terraform >=1.9 y <2.0. Provider AWS 6.x. Módulos:
+Alcance de SPEC-TF-01: cuatro módulos, entornos separados y validación local/CI.
+No se requiere una cuenta AWS ni ejecutar apply. OIDC, VPC endpoint y remote state
+corresponden a TF-02…04 y no están incluidos en esta configuración.
 
-- `network`: VPC, subred privada, tabla de rutas y endpoint Gateway S3 asociado.
-- `storage`: bucket PROD versionado, cifrado AES256, bloqueo público y política TLS.
-- `identity`: proveedor GitHub OIDC (o ARN existente), rol limitado al repositorio
-  y rama configurados, permisos de objetos únicamente en el prefijo `dvc/`.
+| Capa | Módulo | Recursos |
+| --- | --- | --- |
+| Red | `modules/network` | VPC, dos subredes privadas en AZ distintas y rutas |
+| Cómputo | `modules/compute` | EC2 privado, grupo de seguridad, disco cifrado, IMDSv2 |
+| Datos | `modules/data` | RDS MariaDB privado, subnet group, reglas TCP 3306 desde EC2 |
+| Almacenamiento | `modules/storage` | S3 versionado, cifrado y bloqueo público |
 
-## Validación local sin cuenta AWS
+`main.tf` compone los módulos. Cada directorio `environments/dev` y
+`environments/prod` es una raíz independiente, con su propio lockfile y estado local.
+DEV usa la red 10.42.0.0/16 y nombres mp2-dev; PROD usa 10.43.0.0/16 y mp2-prod.
+Los buckets deben terminar en -dev/-prod y tener nombres globalmente únicos.
+PROD habilita Multi-AZ, retención de siete días y protección de borrado en RDS.
 
-Desde esta carpeta:
+## Validación sin credenciales
 
-```sh
-terraform fmt -check -recursive
-terraform init -backend=false
-terraform validate
-```
-
-`init` necesita red para descargar el provider; `validate` no crea recursos ni
-necesita credenciales. Versionar `.terraform.lock.hcl` para reproducir el provider.
-La CI ejecuta estos controles sin claves AWS.
-
-Al actualizar el provider, registrar los checksums de las dos plataformas antes
-de subir el lockfile (desarrollo en Windows y CI en Linux):
+Requiere Terraform 1.9.8 (la versión de CI), Python 3.12 y dependencias `.[dev]`.
+Desde la raíz del repositorio:
 
 ```sh
-terraform providers lock -platform=windows_amd64 -platform=linux_amd64
+terraform -chdir=terraform fmt -check -recursive
+terraform -chdir=terraform/environments/dev init -backend=false -input=false -lockfile=readonly
+terraform -chdir=terraform/environments/dev validate
+terraform -chdir=terraform/environments/prod init -backend=false -input=false -lockfile=readonly
+terraform -chdir=terraform/environments/prod validate
+terraform -chdir=terraform init -backend=false -input=false -lockfile=readonly
+terraform -chdir=terraform validate
+terraform -chdir=terraform test
 ```
 
-Esto permite conservar `-lockfile=readonly` en CI y verificar también el paquete
-Linux instalado, sin desactivar la comprobación de integridad.
+`init` necesita red para consultar el registry. Los lockfiles contienen los checksums
+oficiales para Windows y Linux. Al cambiar la versión del provider, regenerarlos
+en cada raíz con `terraform providers lock -platform=windows_amd64 -platform=linux_amd64`.
 
-## Configuración para un despliegue posterior
+El feature `features/tf-01-terraform-modules.feature` es ejecutable:
 
-Copiar `terraform.tfvars.example` a `terraform.tfvars` y elegir un nombre de bucket
-globalmente único. Si la cuenta ya tiene el proveedor OIDC de GitHub, suministrar
-`github_oidc_provider_arn` para reutilizarlo. Usar autenticación temporal/SSO para
-provisionar la infraestructura; el rol creado permite datos DVC, no administrar AWS.
+```sh
+pytest tests/test_terraform_feature.py -v
+```
 
-En GitHub Actions, un futuro workflow de datos debe solicitar `id-token: write`
-y asumir el output `github_role_arn` mediante OIDC. Este ticket no agrega un
-workflow de despliegue ni ejecuta `apply`.
+Si Terraform no está en PATH se puede definir `TERRAFORM_BIN` con su ruta absoluta.
+Sin el ejecutable, pytest omite solo el escenario de comandos; CI define
+`TF01_REQUIRE_TERRAFORM=1` para que su ausencia sea un error. Los comandos se ejecutan
+de verdad y se comprueban sus códigos. `terraform test` usa mocks y operaciones plan,
+sin crear infraestructura. El workflow Terraform ejecuta todos estos controles.
 
-El endpoint S3 sirve a cargas dentro de esta VPC. Un runner alojado por GitHub
-accede al endpoint público de S3 con TLS y OIDC; no atraviesa esta subred privada.
-El remote DEV sigue siendo MinIO local. No se configura DVC ni se transfieren datos aquí.
+## Valores para un futuro despliegue
 
-El estado es local por ahora y está ignorado por Git. Antes de desplegar en equipo
-se debe acordar un backend compartido. No subir `.tfstate`, planes ni credenciales.
+`terraform.tfvars.example` en cada entorno explica los valores requeridos para
+plan/apply: AMI Linux x86_64 válida en la región elegida y nombre único del bucket.
+Los ejemplos son marcadores, no valores utilizables para despliegue. Cambiar también
+las zonas si se cambia de región. Validate no requiere estos valores.
 
-Referencias oficiales:
-- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint
-- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider
+RDS administra la contraseña maestra mediante Secrets Manager; no hay contraseña
+en archivos .tf. La aplicación aún no se instala en EC2: empaquetado, acceso operativo
+y permisos de ejecución se resolverán en tickets posteriores. La instancia no tiene
+IP pública, SSH abierto, NAT ni acceso a S3 en esta fase. No es una app desplegada.
+
+No versionar tfstate, .terraform, tfvars reales ni planes. El estado remoto está fuera
+de alcance. Separar los directorios no autoriza desplegarlos sin revisar costos,
+valores y acceso al estado con el equipo.
+
+Evidencia local: `docs/tf-01-validation.md` en la raíz del repositorio.
+Referencias: https://developer.hashicorp.com/terraform/language/tests/mocking

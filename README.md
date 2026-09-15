@@ -115,15 +115,15 @@ Metas del plan: 150 imágenes distintas por clase el 11 de septiembre y 300 por 
 release, en al menos dos clases. El conteo definitivo se recalcula después de colapsar duplicados.
 
 
-## Fase 2 — modelos COCO y Terraform
+## TF-01 — Terraform por capas
 
-- [F2-01: contrato de entrada COCO](docs/f2-01-coco-models.md): modelos Pydantic v2,
-  reglas, ejemplos de uso para ingesta y pruebas.
-- [TF-01: infraestructura](terraform/README.md): módulos de red, almacenamiento e
-  identidad OIDC, con validación local sin desplegar recursos.
+Ver [módulos, entornos dev/prod y comandos](terraform/README.md) y
+[evidencia de validación](docs/tf-01-validation.md).
 
-Estas tareas no acreditan el volumen de anotación A-01 ni implementan la ingesta
-F2-02 o el conteo F2-04.
+## F2-01 — Modelos COCO
+
+Ver el [contrato COCO, escenarios y límites](docs/f2-01-coco-models.md).
+F2-01 y TF-01 no acreditan el volumen de anotación A-01.
 
 ## F2-02 — Ingesta del COCO validado
 

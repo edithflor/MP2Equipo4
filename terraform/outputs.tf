@@ -1,12 +1,4 @@
-output "bucket_name" {
-  value = module.storage.bucket_name
-}
-output "github_role_arn" {
-  value = module.identity.role_arn
-}
-output "s3_endpoint_id" {
-  value = module.network.s3_endpoint_id
-}
-output "dvc_remote_url" {
-  value = "s3://${module.storage.bucket_name}/dvc"
-}
+output "instance_id" { value = module.compute.instance_id }
+output "database_address" { value = module.data.address }
+output "bucket_name" { value = module.storage.bucket_name }
+output "vpc_id" { value = module.network.vpc_id }

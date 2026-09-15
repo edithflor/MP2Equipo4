@@ -1,4 +1,3 @@
-# Ruff y Terraform deben recibir los mismos finales de línea en Windows y CI.
 *.py text eol=lf
 *.tf text eol=lf
 *.hcl text eol=lf
