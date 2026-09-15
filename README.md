@@ -133,7 +133,6 @@ source .venv/bin/activate
 Estas tareas no acreditan el volumen de anotación A-01 ni implementan la ingesta
 F2-02 o el conteo F2-04.
 
-
 ## F2-02 — Ingesta del COCO validado
 
 La ingesta recibe el JSON COCO exportado desde el Proyecto 1, lo valida usando
