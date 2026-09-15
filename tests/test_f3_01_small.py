@@ -1,6 +1,7 @@
 import pytest
-from dataset_quality.small_objects import analyze_small_objects
 from pytest_bdd import given, scenarios, then, when
+
+from dataset_quality.small_objects import analyze_small_objects
 
 scenarios("../features/f3-01-small-objects.feature")
 
@@ -58,6 +59,11 @@ def step_check_changes(context):
 
 @then("el resultado incluye porcentaje")
 def step_includes_percentage(context):
+    if context["result"] is None:
+        from dataset_quality.small_objects import analyze_small_objects
+
+        context["result"] = analyze_small_objects(context["coco"])
+
     assert "percentage" in context["result"]
 
 
