@@ -1,6 +1,7 @@
 import pytest
-from dataset_quality.imbalance import analyze_class_imbalance
 from pytest_bdd import given, scenarios, then, when
+
+from dataset_quality.imbalance import analyze_class_imbalance
 
 scenarios("../features/f3-02-class-imbalance.feature")
 
