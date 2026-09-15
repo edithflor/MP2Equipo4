@@ -1,3 +1,4 @@
+from collections import Counter
 from typing import Any
 
 
@@ -14,7 +15,7 @@ def analyze_small_objects(
     total_boxes = 0
     small_boxes = 0
     offender_images = set()
-    class_counts = {}
+    class_counts = Counter()
 
     for ann in annotations:
         bbox = ann.get("bbox", [])
@@ -31,16 +32,12 @@ def analyze_small_objects(
                 offender_images.add(img_id)
 
             cat_name = categories.get(ann.get("category_id"), "unknown")
-            class_counts[cat_name] = class_counts.get(cat_name, 0) + 1
+            class_counts[cat_name] += 1  # Refactor: Sintaxis mucho más limpia
 
     percentage = (small_boxes / total_boxes * 100.0) if total_boxes > 0 else 0.0
 
-    most_affected_class = None
-    if class_counts:
-        most_affected_class = max(class_counts, key=class_counts.get)
-
     return {
         "percentage": percentage,
-        "most_affected_class": most_affected_class,
+        "most_affected_class": max(class_counts, key=class_counts.get) if class_counts else None,
         "offender_images": list(offender_images),
     }
