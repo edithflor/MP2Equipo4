@@ -80,10 +80,7 @@ def exits_nonzero(context):
 
 @then("el error nombra el campo")
 def error_names_field(context):
-    assert (
-        "bbox" in context["stderr"].lower()
-        or "bbox" in context["stdout"].lower()
-    )
+    assert "bbox" in context["stderr"].lower() or "bbox" in context["stdout"].lower()
 
 
 @then("no queda artefacto válido a medias")
