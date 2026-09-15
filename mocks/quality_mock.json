@@ -1,0 +1,9 @@
+{
+  "gate_status": "warn",
+  "metrics": {
+    "total_images": 1500,
+    "total_boxes": 4200,
+    "categories": 3,
+    "failed_checks": 1
+  }
+}
