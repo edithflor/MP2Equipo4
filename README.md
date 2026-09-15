@@ -127,3 +127,8 @@ source .venv/bin/activate
 
 Ver [módulos, entornos dev/prod y comandos](terraform/README.md) y
 [evidencia de validación](docs/tf-01-validation.md).
+
+## F2-01 ? Modelos COCO
+
+Ver el [contrato COCO, escenarios y l?mites](docs/f2-01-coco-models.md).
+F2-01 y TF-01 no acreditan A-01 ni implementan la ingesta F2-02 o el conteo F2-04.

@@ -21,3 +21,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "dataset" {
   }
 }
 output "bucket_name" { value = aws_s3_bucket.dataset.id }
+resource "aws_s3_bucket_policy" "tls" {
+  bucket = aws_s3_bucket.dataset.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Deny"
+      Principal = "*"
+      Action    = "s3:*"
+      Resource  = [aws_s3_bucket.dataset.arn, "${aws_s3_bucket.dataset.arn}/*"]
+      Condition = { Bool = { "aws:SecureTransport" = "false" } }
+    }]
+  })
+}

@@ -9,6 +9,7 @@ description = "Pipeline reproducible de calidad y versionado para datasets COCO"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+  "pydantic>=2.10,<3",
   "fastapi>=0.116",
   "minio>=7.2",
   "pydantic-settings>=2.10",
