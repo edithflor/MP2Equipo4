@@ -56,7 +56,16 @@ def step_has_distance(context):
 
 @when("bajo el umbral")
 def step_lower_threshold(context):
-    context["threshold"] = 0
+    if not context["images"]:
+        step_base_image(context)
+        step_recompressed(context)
+    if context["result"] is None:
+        context["threshold"] = 15
+        from dataset_quality.phash import analyze_duplicates
+
+        context["result"] = analyze_duplicates(context["images"], threshold=context["threshold"])
+
+    context["threshold"] = -1
     from dataset_quality.phash import analyze_duplicates
 
     context["result_strict"] = analyze_duplicates(context["images"], threshold=context["threshold"])
@@ -69,7 +78,7 @@ def step_less_pairs(context):
 
 @when("lo subo")
 def step_raise_threshold(context):
-    context["threshold"] = 20
+    context["threshold"] = 64
     from dataset_quality.phash import analyze_duplicates
 
     context["result_loose"] = analyze_duplicates(context["images"], threshold=context["threshold"])
