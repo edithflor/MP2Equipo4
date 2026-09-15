@@ -1,0 +1,5 @@
+aws_region        = "us-east-1"
+bucket_name       = "reemplazar-por-nombre-unico-mp2-equipo4"
+github_repository = "edithflor/MP2Equipo4"
+github_branch     = "main"
+# github_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"

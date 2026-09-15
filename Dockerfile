@@ -9,6 +9,7 @@ WORKDIR /app
 COPY pyproject.toml README.md ./
 COPY src ./src
 COPY tests ./tests
+COPY features ./features
 COPY examples ./examples
 RUN pip install --upgrade pip && pip install ".[dev]"
 

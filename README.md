@@ -121,3 +121,14 @@ En Linux / macOS:
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
+```
+
+## Fase 2 — modelos COCO y Terraform
+
+- [F2-01: contrato de entrada COCO](docs/f2-01-coco-models.md): modelos Pydantic v2,
+  reglas, ejemplos de uso para ingesta y pruebas.
+- [TF-01: infraestructura](terraform/README.md): módulos de red, almacenamiento e
+  identidad OIDC, con validación local sin desplegar recursos.
+
+Estas tareas no acreditan el volumen de anotación A-01 ni implementan la ingesta
+F2-02 o el conteo F2-04.
