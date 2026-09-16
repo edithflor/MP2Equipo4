@@ -53,6 +53,11 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin123}
       MINIO_SECURE: "false"
       MINIO_BUCKET: ${MINIO_BUCKET:-dataset-dev}
+      COCO_IMAGES_PATH: ${COCO_IMAGES_PATH:-data/images}
+      QUALITY_REPORT_PATH: ${QUALITY_REPORT_PATH:-data/reports/quality.json}
+    volumes:
+      - ./quality.yaml:/app/quality.yaml:ro
+      - ./data:/app/data
     ports:
       - "8000:8000"
     depends_on:
@@ -72,6 +77,17 @@ services:
       timeout: 5s
       retries: 20
       start_period: 10s
+
+  ui:
+    build: .
+    command: streamlit run src/dataset_quality/ui/app.py --server.address=0.0.0.0 --server.port=8501
+    environment:
+      QUALITY_POLICY_PATH: quality.yaml
+    volumes:
+      - ./quality.yaml:/app/quality.yaml
+      - ./data:/app/data:ro
+    ports:
+      - "8501:8501"
 
 volumes:
   mariadb_data:

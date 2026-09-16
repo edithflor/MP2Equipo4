@@ -6,7 +6,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y git \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY pyproject.toml README.md ./
+COPY quality.yaml ./
 COPY src ./src
 COPY tests ./tests
 COPY features ./features

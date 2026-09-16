@@ -1,15 +1,27 @@
 from typing import Literal
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 
 class RuleConfig(BaseModel):
-    threshold: float
+    threshold: float = Field(ge=0)
     severity: Literal["warn", "fail"]
 
 
 class QualityConfig(BaseModel):
     min_images_per_class: RuleConfig
+
+
+class QualityPolicyConfig(BaseModel):
+    """Política versionada para evaluar las salidas de F2/F3."""
+
+    version: int = Field(ge=1)
+    min_images_per_class: RuleConfig
+    small_objects_percentage: RuleConfig
+    class_imbalance_ratio: RuleConfig
+    duplicate_pairs: RuleConfig
+    invalid_boxes: RuleConfig
+    spatial_bias_percentage: RuleConfig
 
 
 class SplitsConfig(BaseModel):
