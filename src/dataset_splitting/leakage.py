@@ -35,9 +35,12 @@ def analyze_leakage(
         img1 = pair.get("image1")
         img2 = pair.get("image2")
 
-        if img1 in img_to_split and img2 in img_to_split:
-            if img_to_split[img1] != img_to_split[img2]:
-                leaked_pairs += 1
+        if (
+            img1 in img_to_split
+            and img2 in img_to_split
+            and img_to_split[img1] != img_to_split[img2]
+        ):
+            leaked_pairs += 1
 
     return {
         "intersection_train_val": intersection_train_val,
