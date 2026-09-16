@@ -156,3 +156,30 @@ el campo que falló
 La interfaz incluye las cinco pestañas de calidad y consume las salidas reales
 de los analizadores F3. Consulta [la guía de APP-02](docs/app-02-analyzers.md)
 para conocer las fuentes de datos, correspondencia de pestañas y verificación.
+
+## F4-01 — Política de calidad
+
+Los umbrales y severidades de la compuerta están versionados en `quality.yaml`.
+Ver [política y demostración](docs/f4-01-quality-yaml.md).
+
+## F4-02 — Compuerta bloqueante
+
+Ejecuta `docker compose run --rm app python -m dataset_quality.gate --coco
+data/validated/coco.json` antes de cualquier etapa posterior. Ver
+[comando, códigos de salida y bloqueo](docs/f4-02-gate-blocks.md).
+
+## F4-03 — Reporte `quality.json`
+
+El gate escribe el contrato de calidad en `data/reports/quality.json`, o en la
+ruta configurada mediante `QUALITY_REPORT_PATH`. Ver
+[campos, evidencia y ejecución con Compose](docs/f4-03-quality-json.md).
+
+## F4-04 — Warn no bloqueante
+
+Los checks `warn` conservan su evidencia en `quality.json` y dejan el proceso
+en `exit=0`. Ver [demostración de warn frente a fail](docs/f4-04-warn.md).
+
+## APP-05 — Settings de la política
+
+La UI de Settings persiste cambios validados en `quality.yaml`. Iníciala con
+`docker compose up --build ui` y consulta la [guía de persistencia](docs/app-05-settings.md).
