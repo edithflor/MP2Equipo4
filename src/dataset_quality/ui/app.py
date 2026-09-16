@@ -1,5 +1,10 @@
+import json
+from pathlib import Path
+
 import streamlit as st
 
+from dataset_quality.ui.analyzers import load_coco
+from dataset_quality.ui.analyzers_view import render_analyzers
 from dataset_quality.ui.overview import get_overview_metrics
 
 st.set_page_config(page_title="Dataset Quality", layout="wide")
@@ -31,3 +36,26 @@ with col3:
     st.metric("Categorías", metrics.get("categories", 0))
 with col4:
     st.metric("Checks Fallidos", metrics.get("failed_checks", 0))
+
+st.divider()
+st.title("Analyzers")
+st.markdown("Resultados calculados por F3-01…05 sobre el COCO seleccionado.")
+
+uploaded_coco = st.file_uploader("COCO validado", type="json")
+uploaded_images = st.file_uploader(
+    "Imágenes para pHash (opcional)",
+    type=["jpg", "jpeg", "png", "webp"],
+    accept_multiple_files=True,
+)
+
+if uploaded_coco is not None:
+    coco_data = json.load(uploaded_coco)
+else:
+    default_coco = Path("data/validated/coco.json")
+    fallback_coco = Path("tests/fixtures/mp1-coco.json")
+    source = default_coco if default_coco.exists() else fallback_coco
+    coco_data = load_coco(source)
+    st.caption(f"Fuente COCO: {source}")
+
+image_bytes = {image.name: image.getvalue() for image in uploaded_images}
+render_analyzers(coco_data, image_bytes)

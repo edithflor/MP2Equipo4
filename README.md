@@ -150,3 +150,9 @@ python -m dataset_quality.ingest
 Si el coco es válido, el comando termina con código 0 y genera el artefacto
 validado, si el coco es inválido termina con código distinto de 0 y muestra
 el campo que falló
+
+## APP-02 — Analizadores
+
+La interfaz incluye las cinco pestañas de calidad y consume las salidas reales
+de los analizadores F3. Consulta [la guía de APP-02](docs/app-02-analyzers.md)
+para conocer las fuentes de datos, correspondencia de pestañas y verificación.
