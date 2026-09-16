@@ -1,0 +1,21 @@
+version: 1
+
+# Cada umbral vive aquí, no en los analizadores ni en la compuerta.
+min_images_per_class:
+  threshold: 300
+  severity: fail
+small_objects_percentage:
+  threshold: 25
+  severity: warn
+class_imbalance_ratio:
+  threshold: 2
+  severity: warn
+duplicate_pairs:
+  threshold: 0
+  severity: warn
+invalid_boxes:
+  threshold: 0
+  severity: fail
+spatial_bias_percentage:
+  threshold: 70
+  severity: warn
