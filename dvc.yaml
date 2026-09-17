@@ -11,10 +11,12 @@ stages:
   gate:
     cmd: python -m dataset_quality.gate
       --coco data/validated/coco.json
+      --images-dir data/images
       --policy quality.yaml
       --output data/reports/quality.json
     deps:
       - data/validated/coco.json
+      - data/images
       - quality.yaml
       - src/dataset_quality/gate.py
       - src/dataset_quality/quality_policy.py
@@ -31,3 +33,4 @@ stages:
       - src/dataset_quality/split.py
     outs:
       - data/splits
+      

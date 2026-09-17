@@ -21,9 +21,15 @@ stages:
       md5: 457cc9fcf36cd8699b21f292ebbe49cc
       size: 1105531
   gate:
-    cmd: python -m dataset_quality.gate --coco data/validated/coco.json --policy
-      quality.yaml --output data/reports/quality.json
+    cmd: python -m dataset_quality.gate --coco data/validated/coco.json 
+      --images-dir data/images --policy quality.yaml --output 
+      data/reports/quality.json
     deps:
+    - path: data/images
+      hash: md5
+      md5: 8a9a091030b6d1b1bf67f30771f78d5f.dir
+      size: 108530715
+      nfiles: 637
     - path: data/validated/coco.json
       hash: md5
       md5: 457cc9fcf36cd8699b21f292ebbe49cc
