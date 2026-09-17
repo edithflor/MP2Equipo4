@@ -1,0 +1,12 @@
+{
+  "versions": [
+    {
+      "version": "v0.1.0",
+      "environment": "DEV"
+    },
+    {
+      "version": "v1.0.0",
+      "environment": "DEV"
+    }
+  ]
+}
