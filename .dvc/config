@@ -1,0 +1,5 @@
+[core]
+    remote = dev
+['remote "dev"']
+    url = s3://dataset-dev/dvc-cache
+    endpointurl = http://localhost:9010
