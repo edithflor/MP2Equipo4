@@ -50,10 +50,7 @@ def render_versions() -> None:
     if diff_data:
         st.subheader("Diff entre versiones")
 
-        st.write(
-            f"Comparación: **{diff_data.get('from')} → "
-            f"{diff_data.get('to')}**"
-        )
+        st.write(f"Comparación: **{diff_data.get('from')} → {diff_data.get('to')}**")
 
         col1, col2, col3 = st.columns(3)
 

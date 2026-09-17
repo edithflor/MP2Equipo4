@@ -17,10 +17,7 @@ def test_split_crea_train_val_test(tmp_path):
             {"id": 9, "file_name": "9.jpg"},
             {"id": 10, "file_name": "10.jpg"},
         ],
-        "annotations": [
-            {"id": i, "image_id": i, "category_id": 1}
-            for i in range(1, 11)
-        ],
+        "annotations": [{"id": i, "image_id": i, "category_id": 1} for i in range(1, 11)],
         "categories": [{"id": 1, "name": "example"}],
     }
 
@@ -52,10 +49,7 @@ def test_split_crea_train_val_test(tmp_path):
 
 def test_split_es_reproducible(tmp_path):
     coco = {
-        "images": [
-            {"id": i, "file_name": f"{i}.jpg"}
-            for i in range(1, 11)
-        ],
+        "images": [{"id": i, "file_name": f"{i}.jpg"} for i in range(1, 11)],
         "annotations": [],
         "categories": [],
     }
@@ -69,6 +63,4 @@ def test_split_es_reproducible(tmp_path):
     split_coco(coco_path, first, seed=42)
     split_coco(coco_path, second, seed=42)
 
-    assert (first / "train.json").read_text() == (
-        second / "train.json"
-    ).read_text()
+    assert (first / "train.json").read_text() == (second / "train.json").read_text()

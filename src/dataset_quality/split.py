@@ -44,15 +44,11 @@ def split_coco(
     for split_name, split_images in splits.items():
         image_ids = {image["id"] for image in split_images}
         split_annotations = [
-            annotation
-            for annotation in annotations
-            if annotation.get("image_id") in image_ids
+            annotation for annotation in annotations if annotation.get("image_id") in image_ids
         ]
 
         payload = {
-            key: value
-            for key, value in coco_data.items()
-            if key not in {"images", "annotations"}
+            key: value for key, value in coco_data.items() if key not in {"images", "annotations"}
         }
         payload["images"] = split_images
         payload["annotations"] = split_annotations
