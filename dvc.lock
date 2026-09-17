@@ -1,0 +1,69 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python -m dataset_quality.ingest
+    deps:
+    - path: data/raw/annotations_coco.json
+      hash: md5
+      md5: 75bf5b67838a6dcefcf76d194652c9bb
+      size: 1009565
+    - path: src/dataset_quality/coco.py
+      hash: md5
+      md5: be1ffd8baca052cceec37b8184493c0c
+      size: 3782
+    - path: src/dataset_quality/ingest.py
+      hash: md5
+      md5: 117763d98518de6596fb064016c4d400
+      size: 1658
+    outs:
+    - path: data/validated/coco.json
+      hash: md5
+      md5: 457cc9fcf36cd8699b21f292ebbe49cc
+      size: 1105531
+  gate:
+    cmd: python -m dataset_quality.gate --coco data/validated/coco.json --policy
+      quality.yaml --output data/reports/quality.json
+    deps:
+    - path: data/validated/coco.json
+      hash: md5
+      md5: 457cc9fcf36cd8699b21f292ebbe49cc
+      size: 1105531
+    - path: quality.yaml
+      hash: md5
+      md5: 8c917ef4eb5ad299d45a1a6f835a0391
+      size: 405
+    - path: src/dataset_quality/gate.py
+      hash: md5
+      md5: 3e32b35cc1542846b27168e524e3f719
+      size: 4024
+    - path: src/dataset_quality/quality_policy.py
+      hash: md5
+      md5: da489d340ae550358761e10ac4aa3438
+      size: 7253
+    outs:
+    - path: data/reports/quality.json
+      hash: md5
+      md5: 24d0df32896503d7622f1f268f3ac97a
+      size: 6070
+  split:
+    cmd: python -m dataset_quality.split --coco data/validated/coco.json 
+      --output-dir data/splits
+    deps:
+    - path: data/reports/quality.json
+      hash: md5
+      md5: 24d0df32896503d7622f1f268f3ac97a
+      size: 6070
+    - path: data/validated/coco.json
+      hash: md5
+      md5: 457cc9fcf36cd8699b21f292ebbe49cc
+      size: 1105531
+    - path: src/dataset_quality/split.py
+      hash: md5
+      md5: f4925f971585ef44a90b4e0c5f35f313
+      size: 2530
+    outs:
+    - path: data/splits
+      hash: md5
+      md5: d0c7411e11bb5d42205e1e47651806df.dir
+      size: 1108640
+      nfiles: 3
