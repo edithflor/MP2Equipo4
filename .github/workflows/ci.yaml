@@ -32,3 +32,6 @@ jobs:
 
       - name: Run Pytest
         run: pytest
+
+      - name: Run Quality Gate (F4-02)
+        run: python -m src.dataset_quality
