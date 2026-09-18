@@ -98,7 +98,7 @@ def execute_gate_command(context: dict) -> None:
 
 @then("el exit code es distinto de 0")
 def gate_returns_nonzero(context: dict) -> None:
-    assert context["process"].returncode == 0
+    assert context["process"].returncode != 0
     assert "FAIL" in context["process"].stdout
 
 
