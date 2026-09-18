@@ -18,4 +18,3 @@ def test_provider_error_does_not_expose_traceback():
     assert result["error"] == "provider_unavailable"
     assert "traceback" not in str(result).lower()
     assert "secret internal provider failure" not in str(result)
-

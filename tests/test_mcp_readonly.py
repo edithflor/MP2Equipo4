@@ -23,4 +23,3 @@ def test_missing_file_returns_controlled_error(tmp_path):
 
     assert result["error"] == "file_not_found"
     assert result["path"] == str(missing)
-

@@ -16,4 +16,3 @@ def call_provider_safely(
             "error": "provider_unavailable",
             "message": "El proveedor de Copilot no está disponible.",
         }
-

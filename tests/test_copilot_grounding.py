@@ -134,4 +134,3 @@ def test_out_of_domain_question_does_not_invent():
     assert "No puedo responder" in result["answer"]
     assert result["tools_used"] == []
     assert result["dataset_version"] == "unknown"
-
