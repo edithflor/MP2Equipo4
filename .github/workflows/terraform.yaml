@@ -33,10 +33,11 @@ jobs:
         run: pytest tests/test_terraform_feature.py -v
 
       - name: Configurar AWS mediante OIDC
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::123456789012:role/mp2-equipo4-github-actions
-          aws-region: us-east-1
+       if: github.event_name != 'pull_request'
+       uses: aws-actions/configure-aws-credentials@v4
+       with:
+         role-to-assume: arn:aws:iam::123456789012:role/mp2-equipo4-github-actions
+         aws-region: us-east-1 
 
       - name: Validar composición y probar capas sin AWS
         working-directory: terraform
