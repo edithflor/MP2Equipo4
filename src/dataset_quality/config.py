@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class RuleConfig(BaseModel):
@@ -8,15 +8,30 @@ class RuleConfig(BaseModel):
     severity: Literal["warn", "fail"]
 
 
+QualityRule = RuleConfig
+
+
+class MinImagesPerClassRule(RuleConfig):
+    threshold: float = Field(ge=300)
+    severity: Literal["fail"]
+
+    @field_validator("threshold")
+    @classmethod
+    def enforce_minimum(cls, value: float) -> float:
+        if value < 300:
+            raise ValueError("min_images_per_class threshold cannot be below 300")
+        return value
+
+
 class QualityConfig(BaseModel):
-    min_images_per_class: RuleConfig
+    min_images_per_class: MinImagesPerClassRule
 
 
 class QualityPolicyConfig(BaseModel):
     """Política versionada para evaluar las salidas de F2/F3."""
 
-    version: int = Field(ge=1)
-    min_images_per_class: RuleConfig
+    version: int = Field(default=1, ge=1)
+    min_images_per_class: MinImagesPerClassRule
     small_objects_percentage: RuleConfig
     class_imbalance_ratio: RuleConfig
     duplicate_pairs: RuleConfig

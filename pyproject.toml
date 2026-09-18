@@ -33,7 +33,7 @@ dev = [
 packages = ["src/dataset_quality"]
 
 [tool.pytest.ini_options]
-addopts = "-q"
+addopts = "-q --basetemp=.pytest_temp"
 testpaths = ["tests"]
 pythonpath = ["src"]
 

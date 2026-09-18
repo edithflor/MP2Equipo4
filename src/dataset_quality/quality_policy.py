@@ -37,6 +37,8 @@ class CheckResult(BaseModel):
 
 class QualityGateReport(BaseModel):
     checks: dict[str, CheckResult]
+    volume: dict[str, Any] = Field(default_factory=dict)
+    verified: bool = True
 
 
 def load_quality_policy(path: str | Path = "quality.yaml") -> QualityPolicyConfig:
