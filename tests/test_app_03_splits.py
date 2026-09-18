@@ -43,7 +43,6 @@ def context(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> dict:
     img1, img2 = initial_splits["train"][0], initial_splits["train"][1]
     phash_pairs = [{"image1": img1, "image2": img2, "distance": 0}]
 
-
     contract = create_split_contract(coco, config, phash_pairs)
 
     splits_file = tmp_path / "splits.json"
@@ -60,7 +59,6 @@ def context(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> dict:
         "splits_file": splits_file,
         "app": None,
     }
-
 
 
 @given("splits.json de una corrida real")
@@ -89,7 +87,6 @@ def check_counts_displayed(context: dict) -> None:
         assert "val" in item
         assert "test" in item
         assert item["train"] + item["val"] + item["test"] == item["total"]
-
 
 
 @then("coinciden con F5-01 / F5-04")
@@ -151,10 +148,9 @@ def view_has_no_db_or_storage_drivers() -> None:
         if isinstance(node, ast.ImportFrom) and node.module:
             imports.add(node.module.split(".")[0])
 
-    assert imports.isdisjoint(
-        forbidden
-    ), f"Importaciones prohibidas encontradas: {imports & forbidden}"
-
+    assert imports.isdisjoint(forbidden), (
+        f"Importaciones prohibidas encontradas: {imports & forbidden}"
+    )
 
 
 @given("un gate en fail")
@@ -167,4 +163,3 @@ def check_screen_blocked_on_gate_fail(context: dict) -> None:
     app = AppTest.from_file(APP_PATH).run(timeout=20)
     error_texts = [err.value for err in app.error]
     assert any("no hay split / bloqueado" in txt for txt in error_texts)
-

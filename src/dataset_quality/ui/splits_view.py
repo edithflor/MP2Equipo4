@@ -163,4 +163,3 @@ def render_splits(
             f"El check de pares cruzados detectó {leaked_pairs} pares de near-duplicates "
             "en splits diferentes."
         )
-

@@ -89,4 +89,3 @@ render_splits(
 render_settings(Path(os.getenv("QUALITY_POLICY_PATH", "quality.yaml")))
 
 render_versions()
-
