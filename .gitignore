@@ -3,8 +3,10 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
+.pytest_temp/
 .ruff_cache/
 .venv/
+
 
 # Environment and secrets
 .env

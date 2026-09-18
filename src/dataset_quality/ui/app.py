@@ -8,6 +8,7 @@ from dataset_quality.ui.analyzers import load_coco
 from dataset_quality.ui.analyzers_view import render_analyzers
 from dataset_quality.ui.overview import get_overview_metrics
 from dataset_quality.ui.settings_view import render_settings
+from dataset_quality.ui.splits_view import render_splits
 from dataset_quality.ui.versions_view import render_versions
 
 st.set_page_config(page_title="Dataset Quality", layout="wide")
@@ -16,9 +17,25 @@ st.title(" Dataset Overview")
 st.markdown("Resumen de las métricas de calidad y estado de la compuerta.")
 
 
-data = get_overview_metrics("mocks/quality_mock.json")
+overview_path = os.getenv("OVERVIEW_QUALITY_REPORT_PATH", "mocks/quality_mock.json")
+default_quality_path = Path("data/reports/quality.json")
+if not os.getenv("OVERVIEW_QUALITY_REPORT_PATH") and default_quality_path.exists():
+    overview_path = str(default_quality_path)
+
+data = get_overview_metrics(overview_path)
 metrics = data.get("metrics", {})
-gate_status = data.get("gate_status", "unknown").lower()
+
+# Si se pasó calidad real con formato dict de checks de F4-03
+has_check_dicts = any(isinstance(v, dict) and "status" in v for v in data.values())
+if not metrics and isinstance(data, dict) and has_check_dicts:
+    failed = sum(1 for v in data.values() if isinstance(v, dict) and v.get("status") == "fail")
+    gate_status = "fail" if failed > 0 else "pass"
+else:
+    gate_status = data.get("gate_status", "unknown").lower()
+
+
+gate_status = os.getenv("OVERVIEW_GATE_STATUS", gate_status).lower()
+
 
 if gate_status == "pass":
     st.success(f"**Estado de la compuerta:** {gate_status.upper()} ")
@@ -63,6 +80,13 @@ else:
 image_bytes = {image.name: image.getvalue() for image in uploaded_images}
 render_analyzers(coco_data, image_bytes)
 
+render_splits(
+    coco_data=coco_data,
+    gate_status=os.getenv("OVERVIEW_GATE_STATUS", gate_status),
+    splits_path=os.getenv("SPLITS_REPORT_PATH"),
+)
+
 render_settings(Path(os.getenv("QUALITY_POLICY_PATH", "quality.yaml")))
 
 render_versions()
+
