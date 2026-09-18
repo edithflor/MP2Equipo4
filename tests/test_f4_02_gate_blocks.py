@@ -156,7 +156,7 @@ def test_gate_returns_zero_for_a_passing_policy(tmp_path: Path) -> None:
 def test_only_warns_allow_following_stages(tmp_path: Path) -> None:
     policy_path = tmp_path / "quality.yaml"
     policy = yaml.safe_load((ROOT / "quality.yaml").read_text(encoding="utf-8"))
-    policy["min_images_per_class"]["threshold"] = 1
+    policy["min_images_per_class"]["threshold"] = 300
     policy["small_objects_percentage"]["threshold"] = 0
     policy_path.write_text(yaml.safe_dump(policy), encoding="utf-8")
     coco_data = _passing_coco()

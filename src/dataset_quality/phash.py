@@ -16,14 +16,14 @@ def analyze_duplicates(images: dict[str, bytes], threshold: int = 5) -> dict[str
     for img_id, img_bytes in images.items():
         try:
             with Image.open(io.BytesIO(img_bytes)) as img:
-                hashes[img_id] = imagehash.phash(img)
+                hashes[str(img_id)] = imagehash.phash(img)
         except Exception:
             continue
 
     pairs = [
-        {"image1": id1, "image2": id2, "distance": hash1 - hash2}
+        {"image1": id1, "image2": id2, "distance": int(hash1 - hash2)}
         for (id1, hash1), (id2, hash2) in combinations(hashes.items(), 2)
         if (hash1 - hash2) <= threshold
     ]
 
-    return {"pairs": pairs}
+    return {"pairs": pairs, "hashed_image_ids": list(hashes.keys())}
