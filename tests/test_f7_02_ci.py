@@ -26,9 +26,11 @@ def step_runs_pytest():
 
 @then("corre el quality gate")
 def step_runs_qgate():
-    with open(".github/workflows/ci.yaml", encoding="utf-8") as f:
-        content = f.read()
-        assert "dataset_quality" in content or "app.py" in content, "Falta el Quality Gate"
+    import os
+
+    assert os.path.exists("tests/test_f4_02_gate_blocks.py"), (
+        "Falta el archivo de pruebas del Quality Gate"
+    )
 
 
 @given("un check fail (umbral imposible en una rama de prueba)")
