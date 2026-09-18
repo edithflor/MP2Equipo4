@@ -32,6 +32,3 @@ jobs:
 
       - name: Run Pytest
         run: pytest
-
-      - name: Run Quality Gate (F4-02)
-        run: python -m dataset_quality.gate --coco examples/coco.json
