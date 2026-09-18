@@ -44,12 +44,25 @@ run "production_database" {
     error_message = "PROD requiere MariaDB privado con clave administrada, Multi-AZ y protección."
   }
 }
+
 run "storage_is_versioned" {
-  command = plan
-  module { source = "./modules/storage" }
-  variables { bucket_name = "mp2-test-bucket-dev" }
+  module {
+    source = "./modules/storage"
+  }
+
+  variables {
+    dvc_cache_bucket_name        = "mp2-test-dvc-cache-dev"
+    dataset_releases_bucket_name = "mp2-test-dataset-releases-dev"
+  }
+
   assert {
-    condition     = aws_s3_bucket_versioning.dataset.versioning_configuration[0].status == "Enabled" && aws_s3_bucket_public_access_block.dataset.block_public_policy
-    error_message = "El bucket debe estar versionado y bloquear acceso público."
+    condition = (
+      aws_s3_bucket_versioning.dvc_cache.versioning_configuration[0].status == "Enabled" &&
+      aws_s3_bucket_versioning.dataset_releases.versioning_configuration[0].status == "Enabled" &&
+      aws_s3_bucket_public_access_block.dvc_cache.block_public_policy &&
+      aws_s3_bucket_public_access_block.dataset_releases.block_public_policy
+    )
+
+    error_message = "Both S3 buckets must have versioning enabled and block public policies."
   }
 }

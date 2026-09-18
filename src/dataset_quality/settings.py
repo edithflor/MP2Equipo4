@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     minio_secret_key: str = Field(min_length=1)
     minio_secure: bool = False
     minio_bucket: str = "dataset-dev"
+    copilot_api_key: str | None = None
+    copilot_provider: str = "local"
 
 
 @lru_cache
