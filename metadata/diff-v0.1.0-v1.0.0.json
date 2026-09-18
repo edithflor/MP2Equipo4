@@ -1,0 +1,13 @@
+{
+  "from": "v0.1.0",
+  "to": "v1.0.0",
+  "images_added": 137,
+  "boxes_added": 720,
+  "classes_below_minimum_before": [
+    "car"
+  ],
+  "classes_below_minimum_after": [],
+  "small_objects_percentage_before": 54.82233502538071,
+  "small_objects_percentage_after": 55.265306122448976,
+  "small_objects_percentage_change": 0.4429710970682663
+}

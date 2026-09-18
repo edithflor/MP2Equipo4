@@ -1,0 +1,10 @@
+{
+  "version": "v0.1.0",
+  "images": 500,
+  "annotations": 2955,
+  "min_images_per_class": 286.0,
+  "classes_below_minimum": [
+    "car"
+  ],
+  "small_objects_percentage": 54.82233502538071
+}

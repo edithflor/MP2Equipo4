@@ -8,6 +8,7 @@ from dataset_quality.ui.analyzers import load_coco
 from dataset_quality.ui.analyzers_view import render_analyzers
 from dataset_quality.ui.overview import get_overview_metrics
 from dataset_quality.ui.settings_view import render_settings
+from dataset_quality.ui.versions_view import render_versions
 
 st.set_page_config(page_title="Dataset Quality", layout="wide")
 
@@ -63,3 +64,5 @@ image_bytes = {image.name: image.getvalue() for image in uploaded_images}
 render_analyzers(coco_data, image_bytes)
 
 render_settings(Path(os.getenv("QUALITY_POLICY_PATH", "quality.yaml")))
+
+render_versions()

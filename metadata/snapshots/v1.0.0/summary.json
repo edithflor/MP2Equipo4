@@ -1,0 +1,9 @@
+{
+  "version": "v1.0.0",
+  "images": 637,
+  "annotations": 3675,
+  "min_images_per_class": 355.0,
+  "small_objects_percentage": 55.265306122448976,
+  "duplicate_pairs": 0.0,
+  "invalid_boxes": 0.0
+}

@@ -1,1 +1,36 @@
-stages: {}
+stages:
+  ingest:
+    cmd: python -m dataset_quality.ingest
+    deps:
+      - data/raw/annotations_coco.json
+      - src/dataset_quality/ingest.py
+      - src/dataset_quality/coco.py
+    outs:
+      - data/validated/coco.json
+
+  gate:
+    cmd: python -m dataset_quality.gate
+      --coco data/validated/coco.json
+      --images-dir data/images
+      --policy quality.yaml
+      --output data/reports/quality.json
+    deps:
+      - data/validated/coco.json
+      - data/images
+      - quality.yaml
+      - src/dataset_quality/gate.py
+      - src/dataset_quality/quality_policy.py
+    outs:
+      - data/reports/quality.json
+
+  split:
+    cmd: python -m dataset_quality.split
+      --coco data/validated/coco.json
+      --output-dir data/splits
+    deps:
+      - data/validated/coco.json
+      - data/reports/quality.json
+      - src/dataset_quality/split.py
+    outs:
+      - data/splits
+      

@@ -183,3 +183,17 @@ en `exit=0`. Ver [demostración de warn frente a fail](docs/f4-04-warn.md).
 
 La UI de Settings persiste cambios validados en `quality.yaml`. Iníciala con
 `docker compose up --build ui` y consulta la [guía de persistencia](docs/app-05-settings.md).
+
+## F6-03 — Remotes dvc dev y prod
+
+El remote `dev` utiliza MinIO local y fue validado correctamente mediante:
+
+```bash
+python -m dvc push -r dev
+python -m dvc pull -r dev
+```
+El remote `prod` está configurado para apuntar a un bucket S3 de produccion
+
+Actualmente no se realizó un `dvc push -r prod` real porque el equipo no dispone de un bucket AWS S3 provisionado para la practica
+La infraestructura terraform define el bucket de producción, pero no se ha ejecutado `terraform apply`
+Las credenciales se proporcionan mediante variables de entorno y no se almacenan en git
