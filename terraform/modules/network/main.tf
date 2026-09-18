@@ -23,3 +23,23 @@ resource "aws_route_table_association" "private" {
 }
 output "vpc_id" { value = aws_vpc.dataset.id }
 output "subnet_ids" { value = aws_subnet.private[*].id }
+
+data "aws_region" "current" {}
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.dataset.id
+  service_name      = "com.amazonaws.${data.aws_region.current.region}.s3"
+  vpc_endpoint_type = "Gateway"
+
+  route_table_ids = [
+    aws_route_table.private.id
+  ]
+
+  tags = {
+    Name = "${var.name}-s3-endpoint"
+  }
+}
+
+output "s3_vpc_endpoint_id" {
+  value = aws_vpc_endpoint.s3.id
+}

@@ -7,24 +7,37 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   validate:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.8
           terraform_wrapper: false
+
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: pip install '.[dev]'
+          python-version: "3.12"
+
+      - run: pip install ".[dev]"
+
       - name: Escenarios de aceptación TF-01 (dev y prod)
         env:
-          TF01_REQUIRE_TERRAFORM: '1'
+          TF01_REQUIRE_TERRAFORM: "1"
         run: pytest tests/test_terraform_feature.py -v
+
+      - name: Configurar AWS mediante OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/mp2-equipo4-github-actions
+          aws-region: us-east-1
+
       - name: Validar composición y probar capas sin AWS
         working-directory: terraform
         run: |

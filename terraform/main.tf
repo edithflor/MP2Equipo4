@@ -21,10 +21,14 @@ module "data" {
   instance_class        = var.db_instance_class
   production            = var.environment == "prod"
 }
+
 module "storage" {
-  source      = "./modules/storage"
-  bucket_name = var.bucket_name
+  source = "./modules/storage"
+
+  dvc_cache_bucket_name        = "${var.bucket_name}-dvc-cache"
+  dataset_releases_bucket_name = "${var.bucket_name}-dataset-releases"
 }
+
 locals {
   name = "mp2-${var.environment}"
 }
