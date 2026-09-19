@@ -7,16 +7,22 @@ import json
 from pathlib import Path
 from typing import Any
 
-# Importamos el módulo F5 de tu equipo
 from dataset_splitting.stratified import generate_stratified_splits
 
 
-def split_coco(coco_path: Path, output_dir: Path, seed: int = 42) -> None:
+def split_coco(
+    coco_path: Path,
+    output_dir: Path,
+    train_ratio: float = 0.7,
+    val_ratio: float = 0.15,
+    seed: int = 42,
+) -> None:
     coco_data: dict[str, Any] = json.loads(coco_path.read_text(encoding="utf-8"))
 
-    # Generar los IDs estratificados con 70/15/15
+    test_ratio = max(0.0, 1.0 - train_ratio - val_ratio)
+
     splits_ids = generate_stratified_splits(
-        coco_data, train_ratio=0.7, val_ratio=0.15, test_ratio=0.15, seed=seed
+        coco_data, train_ratio=train_ratio, val_ratio=val_ratio, test_ratio=test_ratio, seed=seed
     )
 
     images = list(coco_data.get("images", []))
@@ -46,10 +52,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Divide un COCO validado con F5.")
     parser.add_argument("--coco", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--train-ratio", type=float, default=0.7)
+    parser.add_argument("--val-ratio", type=float, default=0.15)
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
-    split_coco(coco_path=args.coco, output_dir=args.output_dir, seed=args.seed)
+    split_coco(
+        coco_path=args.coco,
+        output_dir=args.output_dir,
+        train_ratio=args.train_ratio,
+        val_ratio=args.val_ratio,
+        seed=args.seed,
+    )
     return 0
 
 

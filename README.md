@@ -192,8 +192,13 @@ El remote `dev` utiliza MinIO local y fue validado correctamente mediante:
 python -m dvc push -r dev
 python -m dvc pull -r dev
 ```
-El remote `prod` está configurado para apuntar a un bucket S3 de produccion
+El remote `prod` está configurado para apuntar a un bucket S3 de producción provisionado mediante Terraform en AWS. 
 
-Actualmente no se realizó un `dvc push -r prod` real porque el equipo no dispone de un bucket AWS S3 provisionado para la practica
-La infraestructura terraform define el bucket de producción, pero no se ha ejecutado `terraform apply`
-Las credenciales se proporcionan mediante variables de entorno y no se almacenan en git
+Para sincronizar los artefactos y el caché del dataset hacia el entorno de producción en AWS S3, ejecutar:
+
+```bash
+python -m dvc push -r dev
+python -m dvc pull -r dev
+```
+
+Las credenciales de AWS se proporcionan de forma segura mediante variables de entorno y no se almacenan en Git, cumpliendo con la política de cero llaves estáticas.

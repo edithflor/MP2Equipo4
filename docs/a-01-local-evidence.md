@@ -5,7 +5,10 @@ Fuente: Dataset recolectado y verificado con F4 (Quality Gate M3).
 
 Comando reproducible sobre la copia local:
 
+```bash
 python -m dataset_quality.gate --coco data/validated/coco.json --images-dir data/images --policy quality.yaml --output data/reports/quality.json
+```
+
 
 ## A-01 — Volumen después de pHash
 
