@@ -186,19 +186,12 @@ La UI de Settings persiste cambios validados en `quality.yaml`. Iníciala con
 
 ## F6-03 — Remotes dvc dev y prod
 
-El remote `dev` utiliza MinIO local y fue validado correctamente mediante:
-
-```bash
-python -m dvc push -r dev
-python -m dvc pull -r dev
-```
 El remote `prod` está configurado para apuntar a un bucket S3 de producción provisionado mediante Terraform en AWS. 
 
 Para sincronizar los artefactos y el caché del dataset hacia el entorno de producción en AWS S3, ejecutar:
 
 ```bash
-python -m dvc push -r dev
-python -m dvc pull -r dev
+dvc push -r prod
 ```
 
 Las credenciales de AWS se proporcionan de forma segura mediante variables de entorno y no se almacenan en Git, cumpliendo con la política de cero llaves estáticas.
