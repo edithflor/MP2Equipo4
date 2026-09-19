@@ -1,3 +1,0 @@
-# Elegir una AMI Linux x86_64 real de la misma region antes de plan/apply.
-ami_id = "ami-REEMPLAZAR"
-bucket_name = "mp2-equipo4-REEMPLAZAR-prod"

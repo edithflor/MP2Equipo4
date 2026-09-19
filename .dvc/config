@@ -4,4 +4,5 @@
     url = s3://dataset-dev/dvc-cache
     endpointurl = http://localhost:9010
 ['remote "prod"']
-    url = s3://mp2-equipo4-REEMPLAZAR-prod/dvc-cache
+    url = s3://mp2-equipo4-datos-emilio-prod-dvc-cache
+    region = us-east-1
