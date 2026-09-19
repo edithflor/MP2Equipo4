@@ -24,13 +24,12 @@ stages:
       - data/reports/quality.json
 
   split:
-    cmd: python -m dataset_quality.split
-      --coco data/validated/coco.json
-      --output-dir data/splits
+    cmd: python -m dataset_quality.split --coco data/validated/coco.json --output-dir data/splits
     deps:
       - data/validated/coco.json
       - data/reports/quality.json
       - src/dataset_quality/split.py
+      - src/dataset_splitting/stratified.py
     outs:
       - data/splits
       
