@@ -18,7 +18,7 @@ st.title(" Dataset Overview")
 st.markdown("Resumen de las métricas de calidad y estado de la compuerta.")
 
 
-overview_path = os.getenv("OVERVIEW_QUALITY_REPORT_PATH", "mocks/quality_mock.json")
+overview_path = os.getenv("OVERVIEW_QUALITY_REPORT_PATH", "data/reports/quality.json")
 default_quality_path = Path("data/reports/quality.json")
 if not os.getenv("OVERVIEW_QUALITY_REPORT_PATH") and default_quality_path.exists():
     overview_path = str(default_quality_path)
