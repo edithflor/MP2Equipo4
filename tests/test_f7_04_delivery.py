@@ -32,7 +32,7 @@ def step_no_secrets():
 
 
 @then(
-    "git ls-files no lista .env, pycache, .venv, .dvc/cache, .tfstate, node_modules, jpg/png de dataset" # noqa: E501
+    "git ls-files no lista .env, pycache, .venv, .dvc/cache, .tfstate, node_modules, jpg/png de dataset"  # noqa: E501
 )
 def step_check_gitignore():
     result = subprocess.run(["git", "ls-files"], capture_output=True, text=True)
